@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.sjhub.tt20forged.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "tt20forged.refmap.json",
+  "mixins": [
+    "PlayerListMixin",
+    "ServerWatchdogMixin",
+    "world.ServerLevelMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

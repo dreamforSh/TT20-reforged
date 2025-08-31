@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.sjhub.tt20forged.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "tt20forged.refmap.json",
+  "mixins": [
+    "LivingEntityMixin",
+    "PlayerMixin",
+    "fluid.LavaFluidMixin",
+    "fluid.WaterFluidMixin",
+    "item.ItemEntityMixin",
+    "item.ItemMixin",
+    "world.BlockBehaviourMixin",
+    "world.GameRulesMixin",
+    "world.LevelChunk$BoundTickingBlockEntityMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
