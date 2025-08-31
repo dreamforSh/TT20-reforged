@@ -21,14 +21,28 @@ public class Mask {
 
     public Mask(IForgeRegistry<?> registry, JSONConfiguration file, String maskKey) {
         this.file = file;
-        this.maskType = MaskType.fromString(file.getAsString("type"));
+
+        String type = file.getAsString("type");
+        if (type == null) {
+            TT20Forged.LOGGER.warn("(TT20) Mask type is missing in '{}', defaulting to 'whitelist'.", file.getFileName());
+            this.maskType = MaskType.WHITELIST;
+        } else {
+            this.maskType = MaskType.fromString(type);
+        }
+
         this.registry = registry;
         this.index = RegistryIndex.getIndex(this.registry);
         this.entries = new HashSet<>();
 
-        for (JsonElement element : file.getAsArray(maskKey)) {
+        com.google.gson.JsonArray maskArray = file.getAsArray(maskKey);
+        if (maskArray == null) {
+            TT20Forged.LOGGER.error("(TT20) Mask entry '{}' is missing or not an array in '{}'.", maskKey, file.getFileName());
+            return;
+        }
+
+        for (JsonElement element : maskArray) {
             if (!(element.isJsonPrimitive() && element.getAsJsonPrimitive().isString())) {
-                TT20Forged.LOGGER.error("(TT20) Mask element '" + element + "' isn't a string");
+                TT20Forged.LOGGER.error("(TT20) Mask element '{}' isn't a string", element);
                 return;
             }
 

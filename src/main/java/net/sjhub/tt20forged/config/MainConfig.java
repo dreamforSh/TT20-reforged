@@ -44,6 +44,8 @@ public class MainConfig extends JSONConfiguration {
     public void reload() {
         super.reload();
 
+        if (valueCache == null) return;
+
         for (ConfigOption<Boolean> option : BOOLEAN_OPTIONS) {
             valueCache.put(option.getKey(), getAsBooleanOrDefault(option.getKey(), option.getDefaultValue()));
         }
