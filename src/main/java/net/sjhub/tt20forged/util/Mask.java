@@ -1,10 +1,9 @@
 package net.sjhub.tt20forged.util;
 
-import com.google.gson.JsonElement;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.sjhub.tt20forged.TT20Forged;
-import net.sjhub.tt20forged.config.JSONConfiguration;
+import net.sjhub.tt20forged.config.TOMLConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,13 +12,13 @@ import java.util.Set;
 
 public class Mask {
 
-    private final JSONConfiguration file;
+    private final TOMLConfiguration file;
     private final MaskType maskType;
     private final IForgeRegistry<?> registry;
     private final RegistryIndex index;
     private final Set<ResourceLocation> entries;
 
-    public Mask(IForgeRegistry<?> registry, JSONConfiguration file, String maskKey) {
+    public Mask(IForgeRegistry<?> registry, TOMLConfiguration file, String maskKey) {
         this.file = file;
 
         String type = file.getAsString("type");
@@ -34,19 +33,14 @@ public class Mask {
         this.index = RegistryIndex.getIndex(this.registry);
         this.entries = new HashSet<>();
 
-        com.google.gson.JsonArray maskArray = file.getAsArray(maskKey);
+        List<String> maskArray = file.getAsStringList(maskKey);
         if (maskArray == null) {
             TT20Forged.LOGGER.error("(TT20) Mask entry '{}' is missing or not an array in '{}'.", maskKey, file.getFileName());
             return;
         }
 
-        for (JsonElement element : maskArray) {
-            if (!(element.isJsonPrimitive() && element.getAsJsonPrimitive().isString())) {
-                TT20Forged.LOGGER.error("(TT20) Mask element '{}' isn't a string", element);
-                return;
-            }
-
-            entries.addAll(manageEntry(element.getAsString()));
+        for (String element : maskArray) {
+            entries.addAll(manageEntry(element));
         }
     }
 
@@ -55,7 +49,7 @@ public class Mask {
         String[] split = entry.split(":");
 
         if (split.length != 2) {
-            TT20Forged.LOGGER.error("(TT20) '" + entry + "' is not a valid identifier. Correct format is <namespace>:<path>");
+            TT20Forged.LOGGER.error("(TT20) '{}' is not a valid identifier. Correct format is <namespace>:<path>", entry);
             return new ArrayList<>();
         }
 
@@ -87,7 +81,7 @@ public class Mask {
         return registry;
     }
 
-    public JSONConfiguration getFile() {
+    public TOMLConfiguration getFile() {
         return file;
     }
 

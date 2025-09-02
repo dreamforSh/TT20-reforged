@@ -20,9 +20,11 @@ TT20Forged 是一款旨在改善 Minecraft 服务器在低 TPS (每秒刻数) �
 -   弓和弩的拉弦
 -   随机刻 (影响植物生长等)
 
-所有功能均可在配置文件中独立开关。
+所有功能均可在配置文件或通过游戏内指令独立开关。
 
 ## 命令用法
+
+所有指令都需要相应的操作员 (OP) 权限。
 
 ### `/tt20`
 -   **功能**: 显示模组的基本信息和启用状态。
@@ -33,13 +35,32 @@ TT20Forged 是一款旨在改善 Minecraft 服务器在低 TPS (每秒刻数) �
 -   **权限**: 无
 
 ### `/tt20 status`
--   **功能**: 动态显示所有加速功能的当前开关状态。
+-   **功能**: 动态显示所有加速功能的当前开关状态、TPS、MSPT等详细信息。
 -   **权限**: 无
+
+### `/tt20 set cap <数值>`
+-   **功能**: 动态设置 `tick-repeat-cap` 的值，立即生效。
+-   **示例**: `/tt20 set cap 15`
+-   **权限**: OP 等级 3
 
 ### `/tt20 toggle <配置名>`
 -   **功能**: 切换一个指定的布尔类型配置项的开关状态。
 -   **示例**: `/tt20 toggle block-breaking-acceleration`
 -   **提示**: `<配置名>` 参数支持按 `Tab` 键自动补全。
+-   **权限**: OP 等级 3
+
+### `/tt20 mask`
+-   **功能**: 管理方块实体的黑/白名单。
+-   **子指令**:
+    -   `list`: 显示当前掩码列表的内容和模式。
+    -   `type <whitelist|blacklist>`: 切换黑/白名单模式。
+    -   `add <方块ID>`: 向列表中添加一个方块。
+    -   `remove <方块ID>`: 从列表中移除一个方块。
+-   **示例**:
+    -   `/tt20 mask list`
+    -   `/tt20 mask type blacklist`
+    -   `/tt20 mask add minecraft:chest`
+    -   `/tt20 mask remove minecraft:furnace`
 -   **权限**: OP 等级 3
 
 ### `/tt20 reload`
@@ -48,13 +69,13 @@ TT20Forged 是一款旨在改善 Minecraft 服务器在低 TPS (每秒刻数) �
 
 ## 配置文件
 
-配置文件位于您服务器根目录下的 `config/tt20/` 文件夹中。
+配置文件位于您服务器根目录下的 `config/tt20/` 文件夹中。文件格式已更新为 **TOML**，并为每个选项提供了详细的注释。
 
-### `config.json`
+### `config.toml`
 主配置文件。您可以在这里手动开关各项加速功能。
 -   `tick-repeat-cap`: 补帧上限。这是一个安全设置，用于限制在单次游戏刻中为追赶服务器延迟而重复执行tick的最大次数。默认值为10。设置为-1或0可禁用此上限。建议保持一个合理的正整数。
 
-### `block_entity_mask.json`
+### `block_entity_mask.toml`
 方块实体加速的掩码配置。您可以配置一个白名单或黑名单来精确控制哪些方块实体（例如 `minecraft:furnace`）应该被加速。
 -   `type`: "whitelist" (白名单) 或 "blacklist" (黑名单).
 -   `blocks`: 方块 ID 列表，支持通配符 (例如 `minecraft:*` 或 `*:furnace`).
